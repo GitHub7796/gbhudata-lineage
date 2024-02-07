@@ -1,0 +1,184 @@
+{
+  "name": "test",
+  "source_type": "redshift",
+  "schemata": [
+    {
+      "name": "default",
+      "tables": [
+        {
+          "name": "pagecounts",
+          "columns": [
+            {
+              "name": "group",
+              "data_type": "STRING"
+            },
+            {
+              "name": "page_title",
+              "data_type": "STRING"
+            },
+            {
+              "name": "views",
+              "data_type": "BIGINT"
+            },
+            {
+              "name": "bytes_sent",
+              "data_type": "BIGINT"
+            }
+          ]
+        },
+        {
+          "name": "page",
+          "columns": [
+            {
+              "name":  "page_id",
+              "data_type": "BIGINT"
+            },
+            {
+              "name":  "page_latest",
+              "data_type": "BIGINT"
+            },
+            {
+              "name": "page_title",
+              "data_type": "STRING"
+            }
+          ]
+        },
+        {
+          "name": "redirect",
+          "columns": [
+            {
+              "name": "rd_from",
+              "data_type": "BIGINT"
+            },
+            {
+              "name": "page_title",
+              "data_type": "STRING"
+            }
+
+          ]
+        },
+        {
+          "name": "page_lookup_nonredirect",
+          "columns": [
+            {
+              "name": "redirect_id",
+              "data_type": "BIGINT"
+            },
+            {
+              "name": "redirect_title",
+              "data_type": "STRING"
+            },
+            {
+              "name": "true_title",
+              "data_type": "STRING"
+            },
+            {
+              "name": "page_id",
+              "data_type": "BIGINT"
+            },
+            {
+              "name": "page_version",
+              "data_type": "BIGINT"
+            }
+          ]
+        },
+        {
+          "name": "page_lookup_redirect",
+          "columns": [
+            {
+             "name": "redirect_id",
+             "data_type": "BIGINT"
+            },
+            {
+              "name": "redirect_title",
+              "data_type": "STRING"
+            },
+            {
+              "name": "true_title",
+              "data_type": "STRING"
+            },
+            {
+              "name": "page_id",
+              "data_type": "BIGINT"
+            },
+            {
+              "name": "page_version",
+              "data_type": "BIGINT"
+            }
+          ]
+        },
+        {
+          "name": "page_lookup",
+          "columns": [
+            {
+              "name": "redirect_id",
+              "data_type": "bigint"
+            },
+            {
+              "name": "redirect_title",
+              "data_type": "STRING"
+            },
+            {
+              "name": "true_title",
+              "data_type": "STRING"
+            },
+            {
+              "name": "page_id",
+              "data_type": "BIGINT"
+            },
+            {
+              "name": "page_version",
+              "data_type": "BIGINT"
+            }
+          ]
+        },
+        {
+          "name": "filtered_pagecounts",
+          "columns": [
+            {
+              "name": "group",
+              "data_type": "STRING"
+            },
+            {
+              "name": "page_title",
+              "data_type": "STRING"
+            },
+            {
+              "name": "views",
+              "data_type": "BIGINT"
+            },
+            {
+              "name": "bytes_sent",
+              "data_type": "BIGINT"
+            }
+          ]
+        },
+        {
+          "name": "normalized_pagecounts",
+          "columns": [
+            {
+              "name": "page_id",
+              "data_type": "BIGINT"
+            },
+            {
+              "name": "page_title",
+              "data_type": "STRING"
+            },
+            {
+              "name": "page_url",
+              "data_type": "STRING"
+            },
+            {
+              "name": "views",
+              "data_type": "BIGINT"
+            },
+            {
+              "name": "bytes_sent",
+              "data_type": "BIGINT"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

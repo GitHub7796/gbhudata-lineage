@@ -1,0 +1,78 @@
+version: '3.6'
+services:
+  tokern-catalog:
+    image: postgres:13.2-alpine
+    container_name: tokern-catalog
+    restart: unless-stopped
+    networks:
+      - tokern-internal
+    volumes:
+    - tokern_catalog_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: catal0g_passw0rd
+      POSTGRES_USER: catalog_user
+      POSTGRES_DB: tokern
+  tokern-redis:
+    image: redis:6.2.6-alpine
+    container_name: tokern-redis
+    restart: unless-stopped
+    networks:
+      - tokern-internal
+  tokern-api:
+    image: tokern/data-lineage:latest
+    container_name: tokern-data-lineage
+    restart: unless-stopped
+    depends_on:
+      - tokern-redis
+    networks:
+      - tokern-internal
+      - tokern-net
+    environment:
+      CATALOG_PASSWORD: ${CATALOG_PASSWORD:-catal0g_passw0rd}
+      CATALOG_USER: ${CATALOG_USER:-catalog_user}
+      CATALOG_DB: ${CATALOG_DB:-tokern}
+      CATALOG_HOST: ${CATALOG_HOST:-tokern-catalog}
+      CATALOG_PORT: ${CATALOG_PORT:-5432}
+      GUNICORN_CMD_ARGS: "--bind 0.0.0.0:4142"
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      REDIS_HOST: ${REDIS_HOST:-tokern-redis}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      REDIS_HOST: "tokern-redis"
+  tokern-worker:
+    image: tokern/data-lineage:latest
+    container_name: tokern_worker
+    restart: unless-stopped
+    depends_on:
+      - tokern-redis
+    networks:
+      - tokern-internal
+    command: rq worker --url redis://tokern-redis:6379
+  tokern-viz:
+    image: tokern/data-lineage-viz:latest
+    container_name: tokern-data-lineage-visualizer
+    restart: unless-stopped
+    networks:
+      - tokern-internal
+      - tokern-net
+    ports:
+      - "8000:80"
+networks:
+  tokern-net: # Exposed by your host.
+    # external: true
+    name: "tokern-net"
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 10.10.0.0/24
+  tokern-internal:
+    name: "tokern-internal"
+    driver: bridge
+    internal: true
+    ipam:
+      driver: default
+      config:
+      - subnet: 10.11.0.0/24
+
+volumes:
+  tokern_catalog_data:
